@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "ManifestType": "Build",
+  "Endpoints": [
+    {
+      "Route": "htmlpage.html",
+      "AssetFile": "htmlpage.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9412"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 23 Dec 2024 07:31:21 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU="
+        }
+      ]
+    },
+    {
+      "Route": "htmlpage.qsvte4rfby.html",
+      "AssetFile": "htmlpage.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9412"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 23 Dec 2024 07:31:21 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qsvte4rfby"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU="
+        },
+        {
+          "Name": "label",
+          "Value": "htmlpage.html"
+        }
+      ]
+    }
+  ]
+}

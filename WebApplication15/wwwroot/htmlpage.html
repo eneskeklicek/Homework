@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG.js Gantt Çizelgesi (Saat Seviyesi - 2 Gün)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .gantt-container {
+            overflow-x: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: relative;
+            width: 100%;
+        }
+
+        .machine-labels {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            padding-right: 10px;
+            border-right: 1px solid #ccc;
+            text-align: right;
+        }
+
+        .gantt-svg {
+            margin-left: 130px;
+        }
+
+        .date-label {
+            font-size: 14px;
+            font-weight: bold;
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>SVG.js Gantt Çizelgesi (Saat Seviyesi - 2 Gün)</h1>
+    <div class="gantt-container">
+        <div class="machine-labels" id="machine-labels"></div>
+        <div class="gantt-svg" id="gantt"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.draggable.js"></script>
+    <script>
+        // Çizelge Parametreleri
+        const tasks = [
+            { id: 1, machine: 'Makine 1', start: 1, duration: 5, warpId: '101' },
+            { id: 2, machine: 'Makine 2', start: 3, duration: 3, warpId: '102' },
+            { id: 3, machine: 'Makine 3', start: 6, duration: 4, warpId: '103' },
+            { id: 4, machine: 'Makine 3', start: 10, duration: 3, warpId: '103' },
+            { id: 5, machine: 'Makine 1', start: 25, duration: 4, warpId: '104' },
+            { id: 6, machine: 'Makine 2', start: 27, duration: 5, warpId: '105' },
+            { id: 7, machine: 'Makine 3', start: 30, duration: 6, warpId: '106' }
+        ];
+
+        const machines = [...new Set(tasks.map(task => task.machine))]; // Benzersiz makine isimleri
+
+        const hourWidth = 50; // Her bir saat genişliği (px)
+        const barHeight = 30; // Çubuk yüksekliği (px)
+        const barSpacing = 20; // Çubuklar arası mesafe (px)
+
+        // SVG Alanı Oluştur
+        const totalHours = 48; // 2 gün = 48 saat
+        const svgWidth = totalHours * hourWidth; // Çizelge genişliği (toplam saat sayısı ile çarpılır)
+        const draw = SVG().addTo('#gantt').size(svgWidth, 400); // SVG genişliğini ayarla
+
+        // Soldaki Makine İsimlerini Çiz
+        const labelsContainer = document.getElementById('machine-labels');
+        machines.forEach((machine, index) => {
+            const label = document.createElement('div');
+            label.style.height = `${2 * (barHeight + barSpacing)}px`; // Her makine için iki satır olacak
+            label.style.display = 'flex';
+            label.style.alignItems = 'center';
+            label.style.justifyContent = 'flex-end';
+            label.style.fontWeight = 'bold';
+            label.textContent = machine;
+            labelsContainer.appendChild(label);
+        });
+
+        // Görev Çubuklarını Çiz
+        tasks.forEach((task) => {
+            const yOffset = (machines.indexOf(task.machine) * 2) * (barHeight + barSpacing); // İki satır olduğu için y konumunu ikiyle çarpıyoruz
+            const x = task.start * hourWidth; // Başlangıç pozisyonu (saat cinsinden)
+
+            // Çözgü Satırı (Başka bir grup)
+            const warpGroup = draw.group(); // Çözgü için bir grup oluşturuyoruz
+            const warpRect = warpGroup
+                .rect(task.duration * hourWidth, barHeight)
+                .attr({ fill: '#4f46e5', rx: 5, ry: 5 }) // Yuvarlatılmış köşeler
+                .move(x, yOffset)
+                .data('task', task); // Görev bilgisi ile ilişkilendir
+
+            // Çözgü ID'si etiketi
+            const warpLabel = warpGroup
+                .text(`Çözgü: ${task.warpId}`)
+                .font({ size: 10, anchor: 'middle', fill: '#fff' })
+                .move(x + 5, yOffset + barHeight / 2); // Etiketi yerleştir
+
+            // Çözgü çubuğu da sürüklenebilir olacak
+            warpGroup.draggable().on('dragmove', function(event) {
+                const xPos = event.detail.p.x; // Yeni X pozisyonunu al
+
+                // Çözgü çubuğunun yerini değiştir
+                warpRect.move(xPos, yOffset);
+                warpLabel.move(xPos + 5, yOffset + barHeight / 2);
+
+                // Yeni başlangıç saatini hesapla ve güncelle
+                task.start = xPos / hourWidth; // Başlangıç saatini güncelle
+
+                // Çözgü çubuğu ve iş çubuğunun birbirinin üzerine gelmemesini sağla
+                preventOverlap(warpGroup, warpRect, task);
+            });
+
+            // İş Satırı (Başka bir grup)
+            const workOrderGroup = draw.group(); // İş için bir grup oluşturuyoruz
+            const workOrderRect = workOrderGroup
+                .rect(task.duration * hourWidth, barHeight)
+                .attr({ fill: '#f97316', rx: 5, ry: 5 }) // Farklı renk iş emri için
+                .move(x, yOffset + barHeight + barSpacing); // İş emri satırını aşağıya yerleştir
+
+            // İş Emri ID'si etiketi
+            const workOrderLabel = workOrderGroup
+                .text(`İş ${task.id}`)
+                .font({ size: 12, anchor: 'middle', fill: '#fff' })
+                .move(x + 5, yOffset + barHeight + barSpacing + barHeight / 4); // İş emri ID'sini yazdır
+
+            // İş emri çubuğu da sürüklenebilir olacak
+            workOrderGroup.draggable().on('dragmove', function(event) {
+                const xPos = event.detail.p.x; // Yeni X pozisyonunu al
+
+                // İş çubuğunun yerini değiştir
+                workOrderRect.move(xPos, yOffset + barHeight + barSpacing);
+                workOrderLabel.move(xPos + 5, yOffset + barHeight + barSpacing + barHeight / 4);
+
+                // Yeni başlangıç saatini hesapla ve güncelle
+                task.start = xPos / hourWidth; // Başlangıç saatini güncelle
+
+                // İş çubuğu ve çözgü çubuğunun birbirinin üzerine gelmemesini sağla
+                preventOverlap(workOrderGroup, workOrderRect, task);
+            });
+
+            // Çözgü ve iş çubuğunun birbirinin üzerine gelmesini engelle
+            function preventOverlap(group, rect, task) {
+                const allRects = draw.selectAll('rect'); // Tüm dikdörtgenleri al
+
+                allRects.each(function() {
+                    const otherRect = this;
+                    const otherGroup = otherRect.closest('g'); // Çubuğun bağlı olduğu grup
+                    const otherTask = otherGroup.data('task'); // Diğer görev bilgisi
+
+                    if (task.id !== otherTask.id) {
+                        // Eğer çözgü çubuğu bir iş çubuğunun üzerine gelirse, çözgüyü yukarı kaydır
+                        if (group === warpGroup && otherGroup !== workOrderGroup && otherRect.y() === rect.y()) {
+                            rect.move(rect.x(), otherRect.y() + barHeight + barSpacing);
+                            warpLabel.move(warpLabel.x(), otherRect.y() + barHeight + barSpacing + barHeight / 2);
+                        }
+                        // Eğer iş çubuğu bir çözgü çubuğunun üzerine gelirse, iş çubuğunu aşağı kaydır
+                        if (group === workOrderGroup && otherGroup !== warpGroup && otherRect.y() === rect.y()) {
+                            rect.move(rect.x(), otherRect.y() + barHeight + barSpacing);
+                            workOrderLabel.move(workOrderLabel.x(), otherRect.y() + barHeight + barSpacing + barHeight / 4);
+                        }
+                    }
+                });
+            }
+        });
+
+        // Zaman Çizgisi (Saatler - İki Gün)
+        for (let i = 0; i < totalHours; i++) {
+            const hourLabel = `Saat ${i}`;
+
+            // Saat çizgilerini çiz
+            draw
+                .line(i * hourWidth, 0, i * hourWidth, machines.length * 2 * (barHeight + barSpacing))
+                .stroke({ color: '#ccc', width: 1 });
+
+            // Zaman etiketlerini düzgün bir şekilde yerleştir
+            draw
+                .text(hourLabel)
+                .font({ size: 10, anchor: 'middle', fill: '#333' })
+                .move(i * hourWidth + 5, machines.length * 2 * (barHeight + barSpacing) + 25); // 25px kadar daha aşağıya kaydırdık
+        }
+
+        // Başlangıç Tarihini Göster
+        const startDate = new Date(2024, 11, 21); // 21 Aralık 2024
+        const startDateString = `${startDate.getDate()}.${startDate.getMonth() + 1}.${startDate.getFullYear()}`;
+
+        const dateLabel = document.createElement('div');
+        dateLabel.className = 'date-label';
+        dateLabel.textContent = `Başlangıç Tarihi: ${startDateString}`;
+        document.body.appendChild(dateLabel);
+    </script>
+</body>
+</html>

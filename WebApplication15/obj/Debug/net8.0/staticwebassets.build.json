@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "kTJKYZRFPIfstivJI80rcgDjLER5cfFVsP0KOzO1HuU=",
+  "Source": "WebApplication15",
+  "BasePath": "_content/WebApplication15",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "WebApplication15\\wwwroot",
+      "Source": "WebApplication15",
+      "ContentRoot": "C:\\Users\\bim4\\source\\repos\\WebApplication15\\WebApplication15\\wwwroot\\",
+      "BasePath": "_content/WebApplication15",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\bim4\\source\\repos\\WebApplication15\\WebApplication15\\wwwroot\\htmlpage.html",
+      "SourceId": "WebApplication15",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\bim4\\source\\repos\\WebApplication15\\WebApplication15\\wwwroot\\",
+      "BasePath": "_content/WebApplication15",
+      "RelativePath": "htmlpage#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qsvte4rfby",
+      "Integrity": "xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\htmlpage.html"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "htmlpage.html",
+      "AssetFile": "C:\\Users\\bim4\\source\\repos\\WebApplication15\\WebApplication15\\wwwroot\\htmlpage.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9412"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 23 Dec 2024 07:31:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU="
+        }
+      ]
+    },
+    {
+      "Route": "htmlpage.qsvte4rfby.html",
+      "AssetFile": "C:\\Users\\bim4\\source\\repos\\WebApplication15\\WebApplication15\\wwwroot\\htmlpage.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9412"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 23 Dec 2024 07:31:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qsvte4rfby"
+        },
+        {
+          "Name": "label",
+          "Value": "htmlpage.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-xuuJpz+/BgfJWN1MImAtvx4ifWXxB9xbq85XVlbKPgU="
+        }
+      ]
+    }
+  ]
+}
